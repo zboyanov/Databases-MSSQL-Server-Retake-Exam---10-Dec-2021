@@ -1,0 +1,92 @@
+1.DDL
+
+CREATE TABLE Passengers (
+    [Id] int IDENTITY PRIMARY KEY NOT NULL ,
+    [FullName] varchar(100) UNIQUE  NOT NULL,
+	  [Email] varchar(50) UNIQUE  NOT NULL,
+);
+
+CREATE TABLE Pilots (
+    [Id] int IDENTITY PRIMARY KEY,
+	[FirstName] varchar(30) UNIQUE  NOT NULL,
+	[LastName] varchar(30) UNIQUE   NOT NULL,
+	[Age] tinyint CHECK([Age] BETWEEN 21 AND 62) NOT NULL,
+	[Rating] float CHECK([Rating] BETWEEN 0.00 AND 10.0),
+);
+
+CREATE TABLE AircraftTypes (
+    [Id] int NOT NULL IDENTITY PRIMARY KEY,
+	[TypeName] varchar(30) UNIQUE  NOT NULL,
+);
+
+CREATE TABLE Aircraft (
+    [Id] int NOT NULL IDENTITY PRIMARY KEY,
+	[Manufacturer] varchar(25) NOT NULL,
+	[Model] varchar(30)  NOT NULL,
+	[Year] int  NOT NULL,
+	[FlightHours] int,
+	[Condition] char(1) NOT NULL,
+	[TypeId] int foreign key references [AircraftTypes]([Id]) NOT NULL
+);
+
+
+CREATE TABLE PilotsAircraft (
+[AircraftId] int foreign key references [Aircraft]([Id])  NOT NULL,
+[PilotId] int foreign key references [Pilots]([Id])  NOT NULL,
+Primary Key([AircraftId],[PilotId])
+);
+
+CREATE TABLE Airports(
+ [Id] int IDENTITY PRIMARY KEY,
+ [AirportName] varchar(70) UNIQUE NOT NULL,
+ [Country] varchar(100) UNIQUE NOT NULL
+ );
+
+ Create Table FlightDestinations
+ (
+  [Id] int IDENTITY PRIMARY KEY,
+  [AirportId] int foreign key references [Airports]([Id])  NOT NULL,
+  [Start] DateTime NOT NULL,
+ [AircraftId] int foreign key references [Aircraft]([Id])  NOT NULL,
+ [PassengerId] int foreign key references [Passengers]([Id])  NOT NULL,
+ [TicketPrice] DECIMAL(18,2) DEFAULT 15 NOT NULL
+ );
+ 
+ 
+ 2.Insert
+ SET IDENTITY_INSERT [dbo].[Passengers] ON
+INSERT INTO [dbo].[Passengers] ([Id], [FullName], [Email])
+Values
+(111,'Krystal Cuckson','KrystalCuckson@gmail.com'),
+(112,'Susy Borrel','SusyBorrel@gmail.com'),
+(113,'Saxon Veldman','SaxonVeldman@gmail.com'),
+(114,'Lenore Romera','LenoreRomera@gmail.com'),
+(115,'Enrichetta Jeremiah','EnrichettaJeremiah@gmail.com'),
+(116,'Delaney Stove','DelaneyStove@gmail.com'),
+(117,'Ilaire Tomaszewicz','IlaireTomaszewicz@gmail.com'),
+(118,'Genna Jaquet','GennaJaquet@gmail.com'),
+(119,'Carlotta Dykas','CarlottaDykas@gmail.com'),
+(120,'Viki Oneal','VikiOneal@gmail.com'),
+(121,'Anthe Larne','AntheLarne@gmail.com')
+SET IDENTITY_INSERT [dbo].[Passengers] OFF
+
+3.Update
+UPDATE [Aircraft]
+Set [Condition]='A'
+Where ([Condition]='C' OR [Condition]='B') AND ([FlightHours] is NULL OR [FlightHours]<100) AND [Year]>2013 
+
+4.Delete
+
+5.Aircraft
+SELECT Manufacturer,Model,FlightHours,Condition FROM Aircraft
+ORDER BY FlightHours DESC
+
+6.Aircraft and Pilots
+SELECT Pilots.FirstName,Pilots.LastName,Aircraft.Manufacturer,Aircraft.Model,Aircraft.FlightHours
+FROM Aircraft
+LEFT JOIN PilotsAircraft ON Aircraft.Id=PilotsAircraft.AircraftId
+LEFT JOIN Pilots ON  Pilots.Id=PilotsAircraft.PilotId
+Where  Aircraft.FlightHours is NOT NULL and Aircraft.FlightHours<304
+Order by Aircraft.FlightHours DESC ,
+Pilots.FirstName
+ 
