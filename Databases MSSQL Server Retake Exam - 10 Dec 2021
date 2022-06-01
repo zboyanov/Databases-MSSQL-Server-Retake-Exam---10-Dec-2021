@@ -92,3 +92,18 @@ Where  Aircraft.FlightHours is NOT NULL and Aircraft.FlightHours<304
 Order by Aircraft.FlightHours DESC ,
 Pilots.FirstName
  
+7. Top Flight Destionations
+SELECT TOP(20) FlightDestinations.Id AS DestinationId,FlightDestinations.Start,Passengers.FullName,Airports.AirportName,FlightDestinations.TicketPrice
+FROM FlightDestinations
+LEFT JOIN Passengers ON FlightDestinations.PassengerId=Passengers.Id
+LEFT JOIN Airports ON FlightDestinations.AirportId=Airports.Id
+WHERE datepart(D, FlightDestinations.Start) % 2=0
+ORDER BY FlightDestinations.TicketPrice DESC,
+Airports.AirportName
+SELECT TOP(20) FlightDestinations.Id AS DestinationId,FlightDestinations.Start,Passengers.FullName,Airports.AirportName,FlightDestinations.TicketPrice
+FROM FlightDestinations
+LEFT JOIN Passengers ON FlightDestinations.PassengerId=Passengers.Id
+LEFT JOIN Airports ON FlightDestinations.AirportId=Airports.Id
+WHERE datepart(D, FlightDestinations.Start) % 2=0
+ORDER BY FlightDestinations.TicketPrice DESC,
+Airports.AirportName
