@@ -76,6 +76,8 @@ Set [Condition]='A'
 Where ([Condition]='C' OR [Condition]='B') AND ([FlightHours] is NULL OR [FlightHours]<100) AND [Year]>2013 
 
 4.Delete
+DELETE FROM Passengers
+WHERE LEN(FullName)<=10
 
 5.Aircraft
 SELECT Manufacturer,Model,FlightHours,Condition FROM Aircraft
