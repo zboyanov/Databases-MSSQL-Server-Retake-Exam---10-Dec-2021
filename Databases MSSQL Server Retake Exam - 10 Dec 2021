@@ -100,3 +100,21 @@ LEFT JOIN Airports ON FlightDestinations.AirportId=Airports.Id
 WHERE datepart(D, FlightDestinations.Start) % 2=0
 ORDER BY FlightDestinations.TicketPrice DESC,
 Airports.AirportName
+
+8. Number of flights for each aircraft
+SELECT Aircraft.Id as AircraftId,
+Aircraft.Manufacturer,
+Aircraft.FlightHours,
+Count(FlightDestinations.Id) as FlightDestinationCount,
+ROUND(AVG(FlightDestinations.TicketPrice),2) as AvgPrice
+FROM Aircraft
+INNER JOIN FlightDestinations ON FlightDestinations.AircraftId=Aircraft.Id
+GROUP BY Aircraft.Id,Aircraft.Manufacturer,Aircraft.FlightHours
+having COUNT(FlightDestinations.Id)>1
+ORDER BY COUNT(FlightDestinations.Id) DESC,AircraftId;
+ 
+
+
+
+
+
